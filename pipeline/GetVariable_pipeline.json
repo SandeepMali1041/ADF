@@ -1,0 +1,71 @@
+{
+	"name": "GetVariable_pipeline",
+	"properties": {
+		"description": "Stores the array in the variable",
+		"activities": [
+			{
+				"name": "Src_Metadata_read_activity",
+				"description": "This activity reads metadata from source data lake",
+				"type": "GetMetadata",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "ds_src_azuredl_csvfiles",
+						"type": "DatasetReference"
+					},
+					"fieldList": [
+						"childItems"
+					],
+					"storeSettings": {
+						"type": "AzureBlobFSReadSettings",
+						"recursive": true,
+						"enablePartitionDiscovery": false
+					},
+					"formatSettings": {
+						"type": "DelimitedTextReadSettings"
+					}
+				}
+			},
+			{
+				"name": "setVariable",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Src_Metadata_read_activity",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "var_file_names",
+					"value": {
+						"value": "@activity('Src_Metadata_read_activity').output.childItems",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"var_file_names": {
+				"type": "Array"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-08-05T12:34:11Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

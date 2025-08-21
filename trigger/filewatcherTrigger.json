@@ -1,0 +1,25 @@
+{
+	"name": "filewatcherTrigger",
+	"properties": {
+		"description": "Once file is uploaded/arrived at the source location, this trigger execute the data pipeline",
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "copysalescasvdatafiles",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "BlobEventsTrigger",
+		"typeProperties": {
+			"blobPathBeginsWith": "/file-source/blobs/csvfiles_sales/Fact_Sales.csv",
+			"ignoreEmptyBlobs": true,
+			"scope": "/subscriptions/362d2045-049e-4939-96ab-3448ab949ca9/resourceGroups/AWPROJECT/providers/Microsoft.Storage/storageAccounts/awstoragedatalakepoc",
+			"events": [
+				"Microsoft.Storage.BlobCreated"
+			]
+		}
+	}
+}

@@ -1,0 +1,113 @@
+{
+	"name": "df_marketingdl_transformation",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_sink_azuredl_factcsvfiles",
+						"type": "DatasetReference"
+					},
+					"name": "srcmarketingdlcsvfiles1"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_sink_azuredl_factcsvfiles",
+						"type": "DatasetReference"
+					},
+					"name": "srcmarketingdlcsvfiles2"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_sink_azuredl_factcsvfiles",
+						"type": "DatasetReference"
+					},
+					"name": "srcmarketingdlcsvfiles3"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Parquet1",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "union1"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "aggregate1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          OrderDate as date,",
+				"          StockDate as date,",
+				"          OrderNumber as string,",
+				"          ProductKey as short,",
+				"          CustomerKey as short,",
+				"          TerritoryKey as short,",
+				"          OrderLineItem as boolean,",
+				"          OrderQuantity as boolean",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     limit: 10,",
+				"     ignoreNoFilesFound: false) ~> srcmarketingdlcsvfiles1",
+				"source(output(",
+				"          OrderDate as date,",
+				"          StockDate as date,",
+				"          OrderNumber as string,",
+				"          ProductKey as short,",
+				"          CustomerKey as short,",
+				"          TerritoryKey as short,",
+				"          OrderLineItem as boolean,",
+				"          OrderQuantity as boolean",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     limit: 10,",
+				"     ignoreNoFilesFound: false) ~> srcmarketingdlcsvfiles2",
+				"source(output(",
+				"          OrderDate as date,",
+				"          StockDate as date,",
+				"          OrderNumber as string,",
+				"          ProductKey as short,",
+				"          CustomerKey as short,",
+				"          TerritoryKey as short,",
+				"          OrderLineItem as boolean,",
+				"          OrderQuantity as boolean",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     limit: 10,",
+				"     ignoreNoFilesFound: false) ~> srcmarketingdlcsvfiles3",
+				"srcmarketingdlcsvfiles1, srcmarketingdlcsvfiles2, srcmarketingdlcsvfiles3 union(byName: true)~> union1",
+				"union1 select(mapColumn(",
+				"          OrderNumber,",
+				"          ProductKey,",
+				"          CustomerKey",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 aggregate(groupBy(CustomerKey),",
+				"     OrderNumber = count(OrderNumber)) ~> aggregate1",
+				"aggregate1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'parquet',",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
+			]
+		}
+	}
+}

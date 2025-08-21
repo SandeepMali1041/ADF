@@ -1,0 +1,25 @@
+{
+	"name": "selectedFileTrigger",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "SourceToDiffDept_Lake",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Minute",
+				"interval": 15,
+				"startTime": "2025-08-05T12:15:00",
+				"endTime": "2025-08-05T12:22:14",
+				"timeZone": "India Standard Time"
+			}
+		}
+	}
+}

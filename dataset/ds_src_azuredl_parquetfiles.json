@@ -1,0 +1,20 @@
+{
+	"name": "ds_src_azuredl_parquetfiles",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_azureDLGen2_sink_dl",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "dataflow"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
