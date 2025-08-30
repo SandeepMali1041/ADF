@@ -3,7 +3,7 @@
 	"properties": {
 		"description": "Once file is uploaded/arrived at the source location, this trigger execute the data pipeline",
 		"annotations": [],
-		"runtimeState": "Started",
+		"runtimeState": "Stopped",
 		"pipelines": [
 			{
 				"pipelineReference": {
